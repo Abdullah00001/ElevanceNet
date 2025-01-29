@@ -39,23 +39,25 @@ tags:
   - name: Feedback
 
 paths:
+  # SIGNUP
   /auth/signup:
-    # SIGNUP
     post:
-      description: This Route Is For Signup New User In System
+      description: |-
+        This route accepts user input, validates the provided data, and checks whether the user's email is already registered. If the email is not already in use, a new user record is created in the database. Following successful registration, a one-time password (OTP) code is generated and sent to the user's email address for verification.
       tags:
         - Authentication
       requestBody:
         required: true
         description: |-
-          For Sign Up We Will Take User Input In Request Body
+          To sign up a new user, the request body must include the following fields: firstName, lastName, email, and password. The firstName and lastName are required to capture the user's personal details. The email is required to uniquely identify the user and will be used for sending an OTP verification. The password must meet the system's security criteria and will be used for user authentication.
         content:
           application/json:
             schema:
               $ref: "#components/schemas/User"
       responses:
         "201":
-          description: 201 status is for successful signup
+          description: |-
+            The 201 status code indicates that the user has been successfully created and registered in the system. This response signifies that the sign-up process has been completed successfully, and a new user record has been created in the database. The user can now proceed with the verification process through the OTP sent to their email address
           content:
             application/json:
               schema:
@@ -72,6 +74,9 @@ paths:
                       id:
                         type: string
                         example: 67164cbbdbc6daf7db3bd9cd
+                      email:
+                        type: string
+                        example: jhondoe123@example.com
 
                   errors:
                     type: array
@@ -111,7 +116,7 @@ paths:
                         example: /auth/signup
                       next:
                         type: string
-                        example: null
+                        example: /auth/verify
                       previous:
                         type: string
                         example: null
@@ -120,7 +125,8 @@ paths:
                         example: https://elevancenet.netlify.app/docs/v1
 
         "400":
-          description: 400 status will show when user try to signup without filed up required field or try to signup with invalid email
+          description: |-
+            The 400 status code indicates a bad request. This response is returned when the user attempts to sign up without providing the required fields or when the provided email address is invalid. It signifies that the request cannot be processed due to missing or incorrect information, and the user will need to correct the input before proceeding.
           content:
             application/json:
               schema:
@@ -193,7 +199,8 @@ paths:
                         example: https://elevancenet.netlify.app/docs/v1
 
         "409":
-          description: 409 status will be show when user try to sign up a email that already exist in system
+          description: |-
+            The 409 status code indicates a conflict. This response is returned when the user attempts to sign up with an email address that is already registered in the system. It signifies that the provided email is already in use, and the user must provide a different email address to complete the sign-up process.
           content:
             application/json:
               schema:
@@ -260,16 +267,225 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
         "500":
-          description: 500 code will be show when server error will be happened
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/500"
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
 
-    # VERIFY ACCOUNT
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/signup
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
 
+  # VERIFY ACCOUNT
+  /auth/verify:
+    post:
+      tags:
+        - Authentication
+      description: |-
+        This route verifies a user's account by accepting a One-Time Password (OTP) that was sent to their email during the signup process. Upon receiving a valid OTP, the system marks the user as verified, allowing them to access restricted features. If the OTP is incorrect, expired, or missing, an appropriate error response is returned. This ensures that only legitimate users can complete the registration process.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                otp:
+                  type: string
+                  example: User OTP
+                id:
+                  type: string
+                  example: 67164cbbdbc6daf7db3bd9cd
+      responses:
+        "200":
+          description: |-
+            The 200 status code indicates that the OTP has been successfully verified. This means the user's account has been marked as verified, granting them full access to all features and services that require verification. Additionally, an access token and refresh token are set in HTTP-only cookies, ensuring the user is authenticated without needing to log in again. At this stage, the user is considered fully registered and authenticated, and no further verification steps are required.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Email verification successful"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/verify
+                      next:
+                        type: string
+                        example: /auth/isauthenticate
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
 
-
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/verify
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
 
 components:
   schemas:
@@ -301,67 +517,3 @@ components:
         password:
           type: string
           example: user password
-    "500":
-      properties:
-        success:
-          type: boolean
-          example: false
-        message:
-          type: string
-          example: "Internal Server Error"
-        data:
-          type: array
-          example: null
-
-        errors:
-          type: array
-          items:
-            type: string
-          example:
-            - Due to unexpected error server may be down or could not respond.
-        hints:
-          type: array
-          items:
-            type: string
-          example:
-            - |-
-              Please try again later. If the issue persists, please contact our support team at support@example.com.
-        meta:
-          type: object
-          properties:
-            info:
-              type: object
-              properties:
-                requestedId:
-                  type: string
-                  example: null
-                timestamp:
-                  type: string
-                  example: 2025-01-27T12:30:00Z
-                version:
-                  type: string
-                  example: v1.0.0
-                environment:
-                  type: string
-                  example: production
-            pagination:
-              type: object
-              example: null
-            deprecation:
-              type: object
-              example: null
-        links:
-          type: object
-          properties:
-            self:
-              type: string
-              example: /auth/signup
-            next:
-              type: string
-              example: null
-            previous:
-              type: string
-              example: null
-            documentation:
-              type: string
-              example: https://elevancenet.netlify.app/docs/v1
