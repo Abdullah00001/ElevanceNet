@@ -1,0 +1,367 @@
+openapi: 3.0.0
+
+info:
+  title: ElevanceNet - The Professional Social Networking Platform
+  description: |-
+    ElevanceNet is a modern social networking platform designed for 
+    professionals to share their careers, experiences, and insights. 
+    It addresses the growing need to focus on meaningful and constructive 
+    content, eliminating distractions caused by unproductive or irrelevant posts. 
+    By fostering a community centered around professional growth and 
+    collaboration, ElevanceNet aims to empower users in their personal and professional journeys.
+  version: 1.0.0
+  contact:
+    name: Abdullah Bin Omar Chowdhury
+    email: abdullahbinomarchowdhury@gmail.com
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://elevancenet.netlify.app/terms
+
+servers:
+  - url: http://localhost:5000/api/v1
+    description: Development Server
+  - url: https://elevancenet.vercel.app/api/v1
+    description: Production Server
+
+tags:
+  - name: Authentication
+  - name: User Preference
+  - name: Education
+  - name: Works At
+  - name: Location
+  - name: Social Media
+  - name: Post
+  - name: Like
+  - name: Comment
+  - name: Topics
+  - name: Reports
+  - name: Feedback
+
+paths:
+  /auth/signup:
+    # SIGNUP
+    post:
+      description: This Route Is For Signup New User In System
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        description: |-
+          For Sign Up We Will Take User Input In Request Body
+        content:
+          application/json:
+            schema:
+              $ref: "#components/schemas/User"
+      responses:
+        "201":
+          description: 201 status is for successful signup
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: user created successful
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 67164cbbdbc6daf7db3bd9cd
+
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/signup
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+        "400":
+          description: 400 status will show when user try to signup without filed up required field or try to signup with invalid email
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "validation error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        field:
+                          type: string
+                          example: firstName
+                        message:
+                          type: string
+                          example: firstName field cannot be empty
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Please fill up firstName field
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/signup
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+        "409":
+          description: 409 status will be show when user try to sign up a email that already exist in system
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "signup failed: email already exists"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - You tried to sign up with an email that already exists
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Please try using a different email
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/signup
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: 500 code will be show when server error will be happened
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/500"
+
+    # VERIFY ACCOUNT
+
+
+
+
+components:
+  schemas:
+    Document:
+      properties:
+        _id:
+          type: string
+          example: 67164cbbdbc6daf7db3bd9cd
+        _v:
+          type: number
+          example: 0
+        createdAt:
+          type: string
+          example: 2024-10-21T12:44:53.087+00:00
+        updatedAt:
+          type: string
+          example: 2024-10-21T12:44:53.087+00:00
+    User:
+      properties:
+        firstName:
+          type: string
+          example: jhon
+        lastName:
+          type: string
+          example: Doe
+        email:
+          type: string
+          example: jsondoe123@gmail.com
+        password:
+          type: string
+          example: user password
+    "500":
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: "Internal Server Error"
+        data:
+          type: array
+          example: null
+
+        errors:
+          type: array
+          items:
+            type: string
+          example:
+            - Due to unexpected error server may be down or could not respond.
+        hints:
+          type: array
+          items:
+            type: string
+          example:
+            - |-
+              Please try again later. If the issue persists, please contact our support team at support@example.com.
+        meta:
+          type: object
+          properties:
+            info:
+              type: object
+              properties:
+                requestedId:
+                  type: string
+                  example: null
+                timestamp:
+                  type: string
+                  example: 2025-01-27T12:30:00Z
+                version:
+                  type: string
+                  example: v1.0.0
+                environment:
+                  type: string
+                  example: production
+            pagination:
+              type: object
+              example: null
+            deprecation:
+              type: object
+              example: null
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+              example: /auth/signup
+            next:
+              type: string
+              example: null
+            previous:
+              type: string
+              example: null
+            documentation:
+              type: string
+              example: https://elevancenet.netlify.app/docs/v1
