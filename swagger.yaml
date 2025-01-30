@@ -417,6 +417,135 @@ paths:
                       documentation:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |-
+            The 400 status code indicates that the provided OTP is incorrect. This occurs when the OTP entered by the user does not match the expected OTP. The user should check for typos and try again or request a new OTP if necessary.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "OTP verification failed"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "The provided OTP does not match the expected value."
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure the OTP is entered correctly."
+                      - "If the issue persists, request a new OTP."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/verify"
+                      next:
+                        type: string
+                        example: "/auth/resend"
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status code indicates that the OTP has expired. This typically happens when the time limit for the OTP has passed. To continue with the verification process, the user needs to request a new OTP.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "OTP verification failed"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "The provided OTP has expired."
+                  hints:
+                    type: array
+                    example:
+                      - "Click the 'Resend OTP' button to get a new OTP."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/verify"
+                      next:
+                        type: string
+                        example: "/auth/resend"
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
         "500":
           description: |-
             The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
@@ -487,6 +616,352 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
+  # LOGIN
+  /auth/login:
+    post:
+      description: |-
+        This route is used for logging in a user by verifying their credentials (email and password). Upon receiving the correct email and password, the system authenticates the user. If authentication is successful, an access token and refresh token are generated and set in HTTP-only cookies. These tokens are used to maintain the user's session and authenticate further requests. The access token is used for immediate authentication, while the refresh token is used to obtain a new access token when it expires, ensuring a seamless and secure login experience.
+      tags:
+        - Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: jsondoe123@gmail.com
+                password:
+                  type: string
+                  example: user password
+      responses:
+        "200":
+          description: |-
+            The 200 status code indicates that the login was successful. This means the user's email and password have been validated, and they are now authenticated. Upon successful login, the system generates an access token and a refresh token, which are set in HTTP-only cookies. The access token provides immediate authentication, while the refresh token allows the user to obtain a new access token when it expires. The user is now considered logged in and can access protected resources. No further login steps are required unless the session expires or the user logs out.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Login successful"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/login
+                      next:
+                        type: string
+                        example: /auth/isauthenticate
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |-
+            The 400 status code indicates that the request was invalid due to incorrect data format or missing required fields. This occurs when the input data provided by the user, such as the email or password, does not match the expected format or violates validation rules set by the backend (e.g., empty fields, invalid email format, or password requirements). The user should verify the data they provided and correct any errors before resubmitting the request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid input format"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "The email format is invalid."
+                      - "Password must be at least 8 characters long."
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure that the email is in the correct format (e.g., user@example.com)."
+                      - "Check that the password meets the required minimum length and includes both letters and numbers."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/login"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "401":
+          description: |-
+            The 401 status code indicates that the password provided during login is incorrect. This occurs when a user enters a password that does not match the stored credentials for the given email. The user should double-check their password and try again.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid credentials"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "The provided password is incorrect."
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure that the password is entered correctly."
+                      - "Check if Caps Lock is turned on."
+                      - "If you've forgotten your password, reset it using the 'Forgot Password' option."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/login"
+                      next:
+                        type: string
+                        example: "/auth/forgot-password"
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "404":
+          description: |-
+            The 404 status code indicates that the email provided during login does not exist in the system. This occurs when a user tries to log in with an email that has not been registered or has been deleted. The user should check for typos in the email or register a new account if they haven't already done so.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "User not found"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "No account associated with the provided email."
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure that the email address is entered correctly."
+                      - "If you don't have an account, sign up first."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/login"
+                      next:
+                        type: string
+                        example: "/auth/signup"
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/login
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+  
 components:
   schemas:
     Document:
