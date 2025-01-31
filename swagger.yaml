@@ -39,7 +39,7 @@ tags:
   - name: Feedback
 
 paths:
-  # SIGNUP
+  # SIGNUP ENDPOINT
   /auth/signup:
     post:
       description: |-
@@ -336,7 +336,7 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
-  # VERIFY ACCOUNT
+  # VERIFY ACCOUNT ENDPOINT
   /auth/verify:
     post:
       tags:
@@ -616,7 +616,7 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
-  # RESEND VERIFICATION CODE
+  # RESEND VERIFICATION CODE ENDPOINT
   /auth/resend:
     post:
       description: |-
@@ -895,7 +895,7 @@ paths:
                       documentation:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
-  # LOGIN
+  # LOGIN ENDPOINT
   /auth/login:
     post:
       description: |-
@@ -1240,7 +1240,7 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
-  # CHECK VALIDATION OF ACCESSTOKEN
+  # CHECK VALIDATION OF ACCESSTOKEN ENDPOINT
   /auth/token/validate:
     post:
       tags:
@@ -1443,6 +1443,214 @@ paths:
                       documentation:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
+
+  # REFRESH THE TOKENS ENDPOINT
+  /auth/token/refresh:
+    post:
+      description: |-
+        This endpoint is used to refresh access and refresh tokens when the user's access token has expired.If the request contains a refresh token, the system first verifies its existence.If the token is not found, the request is rejected with a 401 Unauthorized response.If the token exists, the system verifies its validity and checks if it was issued by our system.If the refresh token is invalid or was not issued by our system, all tokens are removed from cookies,and a 401 Unauthorized response is sent with an appropriate error message.If the refresh token is valid and recognized, new access and refresh tokens are generated, set in cookies,and returned with a 200 OK response.
+      tags:
+        - Authentication
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the refresh token provided in the request is valid and has been successfully verified. Upon validation, the system issues a new access token and refresh token, replacing the previous ones and securely storing them in cookies. This ensures continuous authentication without requiring the user to log in again. The token rotation mechanism enhances security by periodically updating tokens, reducing the risk of unauthorized access while maintaining a seamless user experience.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Tokens refreshed successfully."
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/token/refresh
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "401":
+          description: |-
+            The 401 status indicates that the request is unauthorized due to either missing or invalid refresh tokens. If the refresh token is not found in the cookies or is issued by an unauthorized source, the system will reject the request. The user is expected to log in again to obtain valid credentials and refresh tokens.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized credentials"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "No valid refresh token found in cookies."
+                      - "The refresh token is not issued from this  system."
+                  hints:
+                    type: array
+                    example:
+                      - "Please log in again to obtain valid credentials."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/token/refresh
+                      next:
+                        type: string
+                        example: /auth/login
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/token/refresh
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+  # Logout
+
 components:
   schemas:
     Document:
