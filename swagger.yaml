@@ -2150,6 +2150,220 @@ paths:
                         example: https://elevancenet.netlify.app/docs/v1
 
   # SEND OTP TO EMAIL ENDPOINT
+  /auth/recover/send:
+    post:
+      tags:
+        - Password Management
+      description: |-
+        This endpoint is used to initiate the process of sending an OTP (One-Time Password) for password recovery. The user provides their unique user ID in the request. The system first verifies whether a user with the provided ID exists in the database. If no user is found with the provided ID, a `400 Bad Request` status is returned. If the user is found, an OTP is generated and sent to the user's registered email or phone number, and a `200 OK` status is returned, indicating that the OTP has been successfully sent.
+      requestBody:
+        required: true
+        description: |-
+          The request body requires the user's unique identifier (`userId`).  
+          This ID is used to identify the user in the system and resend the verification email.
+        content:
+          application/json:
+            schema:
+              properties:
+                id:
+                  type: string
+                  example: 67164cbbdbc6daf7db3bd9cd
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the user with the provided ID was successfully found in the system. An OTP (One-Time Password) has been generated and sent to the user's registered contact information, such as their email or phone number. This status confirms that the password recovery process has been initiated, and the user can now proceed with using the OTP for resetting their password.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Verification email sent."
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/resend
+                      next:
+                        type: string
+                        example: /auth/recover/send
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |-
+            The 400 status indicates that the user ID provided does not exist in the system. This error occurs when the user cannot be found in the database using the provided ID. It suggests that either the ID is incorrect or no user has registered with that ID. The client should verify the user ID before making the request again.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid user ID"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - User with the ID not found
+                  hints:
+                    type: array
+                    example:
+                      - Please provide a valid ID
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/send
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/send
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+  # VERIFY OTP
 components:
   schemas:
     Document:
