@@ -1240,6 +1240,209 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
+  # CHECK VALIDATION OF ACCESSTOKEN
+  /auth/token/validate:
+    post:
+      tags:
+        - Authentication
+      description: |-
+        This route validates the access token stored in cookies.The server checks whether the token exists, and if present, verifies its validity using the secret key.If the token is valid and issued by the system, authentication is confirmed.If the token is missing, expired, or tampered with, the request is denied.
+      security:
+        - cookieAuth: []
+      responses:
+        "200":
+          description: |-
+            The 200 status is returned when the request includes a valid access token stored in cookies.The server verifies the token's validity using the secret key to ensure it was issued by this system.If the token exists, has not expired, and is confirmed to be issued by this system, authentication is successful.In this case, the user is considered authenticated, and a `200 OK` response is returned without any response body.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User is authenticated"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/validate
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "401":
+          description: |-
+            The 401 status is returned when the request includes an expired, missing, or invalid access token. If the token does not exist in cookies, has expired, or was not issued by this system (validated using the secret key), authentication fails. The request is denied, and a `401 Unauthorized` response is returned.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid accesstoken"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - The provided token is either missing, expired, or was not issued by this system.
+                  hints:
+                    type: array
+                    example:
+                      - If the access token is expired, missing, or invalid, please refresh your tokens.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/validate
+                      next:
+                        type: string
+                        example: /auth/refresh
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/validate
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
 components:
   schemas:
     Document:
