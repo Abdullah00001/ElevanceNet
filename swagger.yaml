@@ -26,6 +26,7 @@ servers:
 
 tags:
   - name: Authentication
+  - name: Password Management
   - name: User Preference
   - name: Education
   - name: Works At
@@ -1852,6 +1853,303 @@ paths:
                       documentation:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
+
+  # FIND ACCOUNT ENDPOINT
+  /auth/recover/find:
+    post:
+      tags:
+        - Password Management
+      description: |-
+        This endpoint is used to initiate the password reset process. The system first verifies whether the provided email in the request body is in a valid format. If the email format is incorrect, a `400 Bad Request` status is returned. If the email format is valid, the system checks if the email exists in the database. If the email is not found, a `404 Not Found` response is returned. If the email exists, the system returns a `200 OK` status with the user's details, indicating that the password reset process can proceed.
+      requestBody:
+        required: true
+        description: |-
+          The request body should contain the user's email address. This email is used to check if the user exists in the system and to initiate the password reset process. The email must be in a valid format, and if it is not, a `400 Bad Request` status will be returned. The email provided will be checked against the system's records to determine if an account associated with it exists.
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: jhondoe@example.com
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the email provided was successfully found in the system. A user associated with the provided email exists, and details regarding the password reset process will be sent to the user's email. The user can now proceed with resetting their password.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User found"
+                  data:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                        example: "John"
+                      lastName:
+                        type: string
+                        example: "Doe"
+                      avatar:
+                        type: string
+                        example: "https://example.com/avatar.jpg"
+                      email:
+                        type: string
+                        example: "johndoe@example.com"
+                      id:
+                        type: string
+                        example: "67164cbbdbc6daf7db3bd9cd"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/find
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |-
+            The 400 status indicates that the provided email format is invalid. The system requires a properly formatted email address to proceed with the request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Validation error"
+                  data:
+                    type: array
+                    example: []
+                  errors:
+                    type: array
+                    example:
+                      - The provided email is not in a valid format.
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure the email follows the correct format (e.g., user@example.com)."
+                      - "Avoid using spaces or special characters not allowed in emails."
+                      - "Double-check for typos before submitting."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/find
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "404":
+          description: |-
+            The 404 status indicates that no user was found with the provided email. This response ensures that the system does not disclose unnecessary details about non-existent accounts for security reasons.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "User not found"
+                  data:
+                    type: array
+                    example: []
+                  errors:
+                    type: array
+                    example:
+                      - No account associated with this email.
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure you entered the correct email."
+                      - "Try using the email associated with your account."
+                      - "If you don’t have an account, consider signing up."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/find
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/find
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+  # SEND OTP TO EMAIL ENDPOINT
 components:
   schemas:
     Document:
