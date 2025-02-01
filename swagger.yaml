@@ -26,7 +26,7 @@ servers:
 
 tags:
   - name: Authentication
-  - name: Password Management
+  - name: Recover Account
   - name: User Preference
   - name: Education
   - name: Works At
@@ -1854,13 +1854,15 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
 
+  # =================================================================================
+
   # FIND ACCOUNT ENDPOINT
   /auth/recover/find:
     post:
       tags:
-        - Password Management
+        - Recover Account
       description: |-
-        This endpoint is used to initiate the password reset process. The system first verifies whether the provided email in the request body is in a valid format. If the email format is incorrect, a `400 Bad Request` status is returned. If the email format is valid, the system checks if the email exists in the database. If the email is not found, a `404 Not Found` response is returned. If the email exists, the system returns a `200 OK` status with the user's details, indicating that the password reset process can proceed.
+        This endpoint is used to initiate the password reset process. When a user requests a password recovery with their email, the system first validates whether the provided email is in a proper format. If the email format is incorrect, a 400 Bad Request status is returned. If the format is valid, the system searches for the email in its resources. If the email is not found, a 404 Not Found response is returned. However, if the email exists, the system retrieves the user's information and temporarily stores it in Redis for the next step. A token is then generated using the user's ID, and a 200 OK status is returned. The token is set in cookies, ensuring secure authentication for the following steps. No payload is included in the response. If any unexpected server error occurs, a 500 Internal Server Error status is returned.
       requestBody:
         required: true
         description: |-
@@ -1875,7 +1877,7 @@ paths:
       responses:
         "200":
           description: |-
-            The 200 status indicates that the email provided was successfully found in the system. A user associated with the provided email exists, and details regarding the password reset process will be sent to the user's email. The user can now proceed with resetting their password.
+            The 200 OK status indicates that the provided email was successfully found in the system. Upon locating the user, their information is temporarily stored in Redis for the next step of the recovery process. A token is then generated using the user’s ID and securely set in HTTP-only cookies. No payload is included in the response to maintain security. The user can now proceed with the password reset process, ensuring a seamless and protected account recovery experience.
           content:
             application/json:
               schema:
@@ -1887,23 +1889,8 @@ paths:
                     type: string
                     example: "User found"
                   data:
-                    type: object
-                    properties:
-                      firstName:
-                        type: string
-                        example: "John"
-                      lastName:
-                        type: string
-                        example: "Doe"
-                      avatar:
-                        type: string
-                        example: "https://example.com/avatar.jpg"
-                      email:
-                        type: string
-                        example: "johndoe@example.com"
-                      id:
-                        type: string
-                        example: "67164cbbdbc6daf7db3bd9cd"
+                    type: array
+                    example: []
                   errors:
                     type: array
                     example: []
@@ -1942,7 +1929,7 @@ paths:
                         example: /auth/recover/find
                       next:
                         type: string
-                        example: null
+                        example: /auth/recover/found
                       previous:
                         type: string
                         example: null
@@ -2153,7 +2140,7 @@ paths:
   /auth/recover/send:
     post:
       tags:
-        - Password Management
+        - Recover Account
       description: |-
         This endpoint is used to initiate the process of sending an OTP (One-Time Password) for password recovery. The user provides their unique user ID in the request. The system first verifies whether a user with the provided ID exists in the database. If no user is found with the provided ID, a `400 Bad Request` status is returned. If the user is found, an OTP is generated and sent to the user's registered email or phone number, and a `200 OK` status is returned, indicating that the OTP has been successfully sent.
       requestBody:
@@ -2364,6 +2351,233 @@ paths:
                         example: https://elevancenet.netlify.app/docs/v1
 
   # VERIFY OTP
+  /auth/recover/verify:
+    post:
+      tags:
+        - Recover Account
+      description: |-
+        This endpoint is used to verify the OTP during the password reset process. The user must provide their unique request ID and OTP. The system first checks whether the OTP has expired. If the OTP is still valid, it is compared with the one stored in Redis. If the OTP matches, a `200 OK` status is returned, confirming successful verification. If the OTP does not match or has expired, a `400 Bad Request` status is returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                otp:
+                  type: string
+                  example: User OTP
+                id:
+                  type: string
+                  example: 67164cbbdbc6daf7db3bd9cd
+      responses:
+        "200":
+          description: |-
+            The 200 status code indicates that the OTP has been successfully verified, meaning the provided OTP matches the one stored in Redis and has not expired. As a result, the user is allowed to proceed to the next step of resetting their password without requiring further OTP verification. To maintain security, the system may clear the OTP from Redis after successful validation. This response ensures a seamless and secure password recovery process, preventing unauthorized access while allowing the user to regain account access efficiently.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "OTP verified successfully."
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/verify
+                      next:
+                        type: string
+                        example: /auth/recover/reset
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |-
+            The 400 status code indicates that the provided OTP is incorrect. This occurs when the OTP entered by the user does not match the expected OTP. The user should check for typos and try again or request a new OTP if necessary.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "OTP verification failed"
+                  data:
+                    type: array
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "The provided OTP does not match the expected value."
+                  hints:
+                    type: array
+                    example:
+                      - "Ensure the OTP is entered correctly."
+                      - "If the issue persists, request a new OTP."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/auth/recover/verify"
+                      next:
+                        type: string
+                        example: "/auth/recover/resend"
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /auth/recover/verify
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+
+  # =================================================================================
+
+  # ADD EDUCATION ENDPOINT
+
+  /profile/education:
+    post:
+      tags:
+        - Education
+      security:
+        - CookieAuth: []
+      description: |-
+        
+
 components:
   schemas:
     Document:
