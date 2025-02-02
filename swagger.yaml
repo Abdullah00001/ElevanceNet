@@ -3610,6 +3610,209 @@ paths:
         - Education
       security:
         - CookieAuth: []
+      description: |-
+        This route allows an authenticated user to delete a specific education record from their profile. To access this route, the user must provide their authentication credentials via a cookie containing a valid access token. Upon receiving the request, the server verifies the validity of the access token and extracts the user ID from its payload. If the token is valid, the system proceeds to locate and remove the specified education record from the database using the provided education ID. A successful deletion results in a 200 OK response, confirming that the education record has been removed. If the access token is missing, expired, or invalid, the server returns a 401 Unauthorized status, requiring the user to re-authenticate. Additionally, if the specified education ID does not exist or belongs to another user, the server may respond with a 404 Not Found error. In cases where an unexpected error occurs during the deletion process, such as database issues or server failures, a 500 Internal Server Error is returned. This ensures that the user is informed about the success or failure of their deletion attempt while maintaining security and data integrity.
+      responses:
+        "200":
+          description: |-
+            The 200 OK response indicates that the education record has been successfully deleted. This confirms that the authenticated user provided a valid request, and the system successfully processed the deletion. The response body includes a confirmation message, ensuring that the user is aware of the successful removal of their education record. Once deleted, the education entry is permanently removed from the database and cannot be recovered. If the user attempts to access the deleted record after this operation, the system will return a 404 Not Found response. This ensures proper feedback and maintains data consistency within the system.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Education details deleted successfully."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: 67164cbbdbc6daf7db3bd9cd
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: null
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "401":
+          description: |-
+            The 401 Unauthorized status indicates that the request lacks valid authentication credentials. This occurs when the user does not provide an access token, the token is expired, or the token is invalid. As a result, the request is rejected, and no action is performed. To resolve this, the user must ensure they are logged in and include a valid access token in the request. If the issue persists, refreshing the authentication token or re-authenticating may be necessary.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Unauthorized access.
+                  data:
+                    type: object
+                    example: []
+
+                  errors:
+                    type: array
+                    example:
+                      - "Access token is missing."
+                      - "Invalid access token."
+                      - "Expired access token."
+
+                  hints:
+                    type: array
+                    example:
+                      - "Make sure to include the access token in the request cookie."
+                      - "Check if the access token is valid and not expired."
+                      - "Obtain a new access token if the current one is expired."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/education/67164cbbdbc6daf7db3bd9cd
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/education/67164cbbdbc6daf7db3bd9cd
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+  # WORKS AT POST,GET ALL ENDPOINT
 components:
   schemas:
     Document:
