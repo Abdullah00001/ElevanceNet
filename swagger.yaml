@@ -3357,6 +3357,259 @@ paths:
                       documentation:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
+    put:
+      tags:
+        - Education
+      security:
+        - CookieAuth: []
+      description: |-
+        This route allows an authenticated user to update their specific education details. To access this route, the user must include their credentials via a cookie containing a valid access token. Upon receiving the request, the server verifies the validity of the access token. If the token is valid, the user ID is extracted from the token’s payload. The system then proceeds to update the user's education details in the database based on the provided id. The request body must include the updated education information in the appropriate format. If the update is successful, the server responds with a 200 OK status, including a success message and the updated education data. However, if the access token is missing, expired, or invalid, the server returns a 401 Unauthorized status, indicating that the user must authenticate before proceeding. If any error occurs during the update process, such as issues with the database or the provided data, the server returns a 400 Bad Request or 500 Internal Server Error, depending on the nature of the issue. This ensures that users are informed of any issues with their update attempt. The PUT method allows for a complete replacement of the education record, requiring the user to provide the full set of data for the resource being updated.
+      requestBody:
+        description: |-
+          The requestBody for the PUT /profile/education/:id route contains the data needed to update a specific education record for the authenticated user. This body should include all the relevant details of the education entry the user wishes to modify. The required fields typically include the instituteName, isGraduated status, startAt and endAt dates, and a description of the course or degree completed. The request body should be structured in JSON format, and all fields must be provided for the update to be successful. If any field is missing or the data is malformed, the server may respond with a 400 Bad Request status. The user must ensure the provided data is valid to avoid errors. If the data is successfully validated, the server updates the existing education record and returns the updated information in the response. The requestBody serves as the critical input to trigger the update process, ensuring that the user's education profile is kept up-to-date.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instituteName:
+                  type: string
+                  example: Green State University
+                description:
+                  type: string
+                  example: |-
+                    A university is an institution of higher education that awards degrees in various fields of study. Universities typically include liberal arts and sciences colleges, as well as graduate and professional schools.
+                isGraduated:
+                  type: boolean
+                  example: false
+                startAt:
+                  type: string
+                  example: 2016-01-12
+                endAt:
+                  type: string
+                  example: 2019-09-22
+      responses:
+        "200":
+          description: |-
+            The 200 OK response indicates that the education details have been successfully updated. This means the authenticated user provided valid input, and the system successfully processed the update request. The response body contains a confirmation message along with the updated education details. This ensures that the user can verify the modifications immediately after the request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Education details updated successfully."
+                  data:
+                    type: object
+                    properties:
+                      instituteName:
+                        type: string
+                        example: "University of ABC"
+                      isGraduated:
+                        type: boolean
+                        example: true
+                      startAt:
+                        type: string
+                        format: date
+                        example: "2018-08-01"
+                      endAt:
+                        type: string
+                        format: date
+                        example: "2022-06-01"
+                      description:
+                        type: string
+                        example: "Completed Bachelor's in Computer Science"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: 67164cbbdbc6daf7db3bd9cd
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/education/67164cbbdbc6daf7db3bd9cd
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "401":
+          description: |-
+            The 401 Unauthorized status indicates that the request lacks valid authentication credentials. This occurs when the user does not provide an access token, the token is expired, or the token is invalid. As a result, the request is rejected, and no action is performed. To resolve this, the user must ensure they are logged in and include a valid access token in the request. If the issue persists, refreshing the authentication token or re-authenticating may be necessary.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: Unauthorized access.
+                  data:
+                    type: object
+                    example: []
+
+                  errors:
+                    type: array
+                    example:
+                      - "Access token is missing."
+                      - "Invalid access token."
+                      - "Expired access token."
+
+                  hints:
+                    type: array
+                    example:
+                      - "Make sure to include the access token in the request cookie."
+                      - "Check if the access token is valid and not expired."
+                      - "Obtain a new access token if the current one is expired."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/education/67164cbbdbc6daf7db3bd9cd
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "500":
+          description: |-
+            The 500 status code indicates an internal server error. This response is returned when an unexpected error occurs on the server during the sign-up process. It signifies that the server encountered a problem while processing the request, and the user should try again later. The issue is typically related to server-side failures or misconfigurations.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: array
+                    example: null
+
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - Due to unexpected error server may be down or could not respond.
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - |-
+                        Please try again later. If the issue persists, please contact our support team at support@example.com.
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/education/67164cbbdbc6daf7db3bd9cd
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+    delete:
+      tags:
+        - Education
+      security:
+        - CookieAuth: []
 components:
   schemas:
     Document:
