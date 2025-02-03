@@ -29,7 +29,7 @@ tags:
   - name: Recover Account
   - name: User Preference
   - name: Education
-  - name: Works At
+  - name: Experiences
   - name: Location
   - name: Social Media
   - name: Post
@@ -2569,7 +2569,7 @@ paths:
 
   # ADD EDUCATION ENDPOINT
 
-  /profile/education:
+  /profiles/education:
     post:
       tags:
         - Education
@@ -3124,7 +3124,7 @@ paths:
                         example: https://elevancenet.netlify.app/docs/v1
 
   # SINGLE EDUCATION GET,PUT,DELETE ENDPOINT
-  /profile/education/:id:
+  /profiles/education/:id:
     get:
       tags:
         - Education
@@ -3813,6 +3813,351 @@ paths:
                         type: string
                         example: https://elevancenet.netlify.app/docs/v1
   # WORKS AT POST,GET ALL ENDPOINT
+  /profiles/experiences:
+    post:
+      tags:
+        - Experiences
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows an authenticated user to add their work experience details to their profile. When a user submits a request, authentication is first verified using an access token stored in cookies. If the token is missing, invalid, or expired, the request is rejected with a 401 Unauthorized status. If authentication is successful, the system extracts the user ID from the decoded payload of the token. Using this user ID, a new experience document is created and stored in the database. Upon successful creation, a 201 Created status is returned, confirming that the experience details have been successfully added to the user’s profile. In the case of an unexpected server error, a 500 Internal Server Error status is returned, indicating that the request could not be processed due to an issue on the server side.
+      requestBody:
+        required: true
+        description: |-
+          The request body must include the necessary details about the user's work experience. The required fields are: company name, which specifies the organization where the user has worked; description, providing additional details about the role or responsibilities; employment type, indicating whether the job was full-time, part-time, contract, or freelance; job mode, specifying if the work was remote, onsite, or hybrid; start at, representing the date when the user began the job; end at, marking the last working date (if applicable); designation, defining the job title or position held; and active employee, a boolean value indicating whether the user is currently employed at this company. These details help build a comprehensive professional profile for the user.
+        content:
+          application/json:
+            schema:
+              properties:
+                companyName:
+                  type: string
+                  description: Name of the company where the user has worked.
+                  example: "Tech Solutions Ltd."
+                description:
+                  type: string
+                  description: Additional details about the role, responsibilities, or achievements.
+                  example: "Worked as a backend developer, responsible for API development and database management."
+                employmentType:
+                  type: string
+                  description: Type of employment (e.g., full-time, part-time, contract, freelance).
+                  example: "Full-time"
+                jobMode:
+                  type: string
+                  description: Work mode indicating whether the job was remote, onsite, or hybrid.
+                  example: "Remote"
+                startAt:
+                  type: string
+                  format: date
+                  description: Date when the user started working at the company (YYYY-MM-DD format).
+                  example: "2022-06-01"
+                endAt:
+                  type: string
+                  format: date
+                  nullable: true
+                  description: Date when the user left the company (nullable if currently employed).
+                  example: "2024-01-15"
+                designation:
+                  type: string
+                  description: Job title or position held at the company.
+                  example: "Backend Engineer"
+                activeEmployee:
+                  type: boolean
+                  description: Indicates whether the user is currently employed at the company.
+                  example: false
+      responses:
+        "201":
+          description: |-
+            The 201 status indicates that the experience has been successfully created. An authenticated user has added their work experience, which is now stored in the database. The response includes the details of the newly created experience entry.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Experience details added successfully.
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/Document"
+                    properties:
+                      companyName:
+                        type: string
+                        example: Tech Solutions Ltd.
+                      description:
+                        type: string
+                        example: |-
+                          A leading technology company specializing in software development, cloud computing, and AI-driven solutions. Provides innovative services to global clients across multiple industries.
+                      employmentType:
+                        type: string
+                        example: Full-time
+                      jobMode:
+                        type: string
+                        example: Remote
+                      startAt:
+                        type: string
+                        example: 2020-06-15
+                      endAt:
+                        type: string
+                        example: 2023-04-30
+                      designation:
+                        type: string
+                        example: Senior Backend Engineer
+                      activeEmployee:
+                        type: boolean
+                        example: false
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: 67164cbbdbc6daf7db3bd9cd
+                          timestamp:
+                            type: string
+                            example: 2025-01-27T12:30:00Z
+                          version:
+                            type: string
+                            example: v1.0.0
+                          environment:
+                            type: string
+                            example: production
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: /profile/experiences
+                      next:
+                        type: string
+                        example: /auth/verify
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: https://elevancenet.netlify.app/docs/v1
+        "400":
+          description: |
+            The 400 status indicates that the request was invalid due to missing or incorrect data. This typically occurs when required fields are not provided, have incorrect formats, or fail validation checks. The response includes error details to help the user correct the request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid input data."
+                  data:
+                    type: "object"
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - "Company name is required."
+                      - "Start date must be a valid date."
+                      - "End date cannot be before the start date."
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      - "Ensure all required fields are provided."
+                      - "Check that date fields are in the correct format (YYYY-MM-DD)."
+                      - "End date should be greater than or equal to the start date."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/experiences"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "401":
+          description: |
+            The 401 status code indicates that the user is not authenticated. This can occur if the user is not logged in or has not provided valid authentication credentials. The response contains a message detailing that authentication is required to access the requested resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "Authentication token is missing."
+                  hints:
+                    type: array
+                    example:
+                      - "Please ensure you are logged in and provide valid authentication credentials."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "500":
+          description: |
+            The 500 status code indicates that the server encountered an unexpected condition that prevented it from fulfilling the request. This can occur due to server errors or internal issues. The response will contain details about the internal server error and potential steps the user can take.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      - "Due to unexpected error, the server may be down or could not respond."
+                  hints:
+                    type: array
+                    example:
+                      - "Please try again later. If the issue persists, please contact our support team at support@example.com."
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    get:
+      tags:
+        - Experiences
+      security:
+        - CookieAuth: []
+      description: |-
+
 components:
   schemas:
     Document:
