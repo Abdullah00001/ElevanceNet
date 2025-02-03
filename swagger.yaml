@@ -4382,6 +4382,687 @@ paths:
                         type: string
                         example: "https://elevancenet.netlify.app/docs/v1"
   # EXPERIENCE GET,PUT,DELETE ENDPOINT
+  /profile/experiences/:id:
+    get:
+      tags:
+        - Experiences
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows an authenticated user to retrieve their specific experience details using the provided experience ID. The user must be authenticated to access the data. If the user is not authenticated, a **401 Unauthorized** response will be returned. Upon successful authentication, the system will fetch the experience record that corresponds to the provided ID. In case of a successful retrieval, a **200 OK** response will be returned along with the experience details. If an internal server error occurs while processing the request, a **500 Internal Server Error** will be sent, and the user will be notified of the issue.
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the request was successful, and the experience details were fetched successfully. The response includes the requested experience data, which may contain the company name, description, employment type, job mode, and other related details about the user's experience.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Experience details fetched successfully."
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/Experience"
+                    properties:
+                      companyName:
+                        type: string
+                        example: "Green State University"
+                      description:
+                        type: string
+                        example: "A university offering various academic programs."
+                      employmentType:
+                        type: string
+                        example: "Full-time"
+                      jobMode:
+                        type: string
+                        example: "On-site"
+                      startAt:
+                        type: string
+                        example: "2016-01-12"
+                      endAt:
+                        type: string
+                        example: "2019-09-22"
+                      designation:
+                        type: string
+                        example: "Software Engineer"
+                      activeEmployee:
+                        type: boolean
+                        example: false
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This status means that the user is not authenticated, or the authentication token is missing or invalid. The user must log in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that the request could not be completed due to an internal server error. This status code suggests that something went wrong on the server side while processing the request. The user will be informed to try again later, and if the issue persists, they are advised to contact support for further assistance.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    put:
+      tags:
+        - Experiences
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows an authenticated user to update their existing experience details using the provided experience ID. The user must be authenticated to access the data. If the user is not authenticated, a **401 Unauthorized** response will be returned. If the provided data is valid and the experience update is successful, a **200 OK** response will be returned with the updated experience data. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                companyName:
+                  type: string
+                  example: "Tech Solutions Ltd."
+                description:
+                  type: string
+                  example: "A leading company in the tech industry."
+                employmentType:
+                  type: string
+                  example: "Part-time"
+                jobMode:
+                  type: string
+                  example: "Remote"
+                startAt:
+                  type: string
+                  example: "2021-01-15"
+                endAt:
+                  type: string
+                  example: "2023-12-01"
+                designation:
+                  type: string
+                  example: "Software Developer"
+                activeEmployee:
+                  type: boolean
+                  example: true
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the experience update was successful, and the response contains the updated experience details. The user can see the modified data, including company name, description, employment type, and other relevant fields.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Experience updated successfully."
+                  data:
+                    type: object
+                    allOf:
+                      - $ref: "#components/schemas/Experience"
+                    properties:
+                      companyName:
+                        type: string
+                        example: "Tech Solutions Ltd."
+                      description:
+                        type: string
+                        example: "A leading company in the tech industry."
+                      employmentType:
+                        type: string
+                        example: "Part-time"
+                      jobMode:
+                        type: string
+                        example: "Remote"
+                      startAt:
+                        type: string
+                        example: "2021-01-15"
+                      endAt:
+                        type: string
+                        example: "2023-12-01"
+                      designation:
+                        type: string
+                        example: "Software Developer"
+                      activeEmployee:
+                        type: boolean
+                        example: true
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This status means that the user is not authenticated, or the authentication token is missing or invalid. The user must log in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that the request could not be completed due to an internal server error. This status code suggests that something went wrong on the server side while processing the request. The user will be informed to try again later, and if the issue persists, they are advised to contact support for further assistance.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    delete:
+      tags:
+        - Experiences
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows an authenticated user to delete an existing experience using the provided experience ID. The user must be authenticated to access the data. If the user is not authenticated, a **401 Unauthorized** response will be returned. If the experience deletion is successful, a **200 OK** response will be returned. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the experience was successfully deleted. The response will confirm the deletion with a success message, and no data will be returned.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Experience deleted successfully."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This status means that the user is not authenticated, or the authentication token is missing or invalid. The user must log in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that the request could not be completed due to an internal server error. This status code suggests that something went wrong on the server side while processing the request. The user will be informed to try again later, and if the issue persists, they are advised to contact support for further assistance.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/experiences/67164cbbdbc6daf7db3bd9cd"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
 components:
   schemas:
     Document:
