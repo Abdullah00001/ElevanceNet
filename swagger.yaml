@@ -32,7 +32,7 @@ tags:
   - name: Education
   - name: Experiences
   - name: Location
-  - name: Social Media
+  - name: Social Links
   - name: Post
   - name: Like
   - name: Comment
@@ -6599,6 +6599,1514 @@ paths:
                         type: string
                         example: "https://elevancenet.netlify.app/docs/v1"
   # SOCIAL MEDIA POST,GET ENDPOINT DESIGN
+  /profile/sociallinks:
+    post:
+      tags:
+        - Social Links
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to add a new social media link to their profile. The user must provide the `platformName` (e.g., Facebook, LinkedIn, etc.) and the corresponding `profileLink` (URL to their profile on that platform). The user must be authenticated to access this resource. Upon successful creation of the social link, a **201 Created** response will be returned, including the details of the newly created social media link. If the user is not authenticated, a **401 Unauthorized** status will be returned. If the data is invalid (e.g., missing required fields), a **400 Bad Request** response will be returned. In case of a server error, a **500 Internal Server Error** status will be returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platformName:
+                  type: string
+                  example: "LinkedIn"
+                profileLink:
+                  type: string
+                  example: "https://www.linkedin.com/in/username"
+      responses:
+        "201":
+          description: |-
+            The 201 status indicates that the social link was successfully created. The response will include the details of the newly created social link, such as the `platformName` and `profileLink`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Social media link added successfully."
+                  data:
+                    type: object
+                    properties:
+                      platformName:
+                        type: string
+                        example: "LinkedIn"
+                      profileLink:
+                        type: string
+                        example: "https://www.linkedin.com/in/username"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request is malformed or invalid. This could be due to missing required fields like `platformName` or `profileLink`, or an invalid format for one or both fields.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid request data."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      ["The 'platformName' and 'profileLink' are required."]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure 'platformName' is a valid social media platform and 'profileLink' is a valid URL.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    get:
+      tags:
+        - Social Links
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+      description: |-
+        This endpoint allows the authenticated user to retrieve all social media links associated with their profile. The response includes a list of social links, where each link contains the `platformName` and the corresponding `profileLink`. The user must be authenticated to access this resource. Upon a successful request, a **200 OK** status will be returned, including the list of social links. If the user is not authenticated, a **401 Unauthorized** status will be returned. In case of a server error, a **500 Internal Server Error** status will be returned.
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the request was successful, and the response contains the list of social media links for the authenticated user. The response includes the `platformName` and `profileLink` for each social media link.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Social media links retrieved successfully."
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        platformName:
+                          type: string
+                          example: "LinkedIn"
+                        profileLink:
+                          type: string
+                          example: "https://www.linkedin.com/in/username"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+  # SOCIAL LINKS GET,PUT,DELETE ENDPOINT DESIGN
+  /profile/sociallinks/:id:
+    get:
+      tags:
+        - Social Links
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to retrieve a single social media link associated with their profile using the unique identifier (`id`). The response includes the details of the specific social media link, including the `platformName` and the corresponding `profileLink`. If the requested social link does not exist, a **404 Not Found** status will be returned. If the user is not authenticated, a **401 Unauthorized** status will be returned. In case of a server error, a **500 Internal Server Error** status will be returned. If the request has invalid parameters, a **400 Bad Request** status will be returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the social media link to retrieve.
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the request was successful, and the response contains the requested social media link with the `platformName` and `profileLink` for the authenticated user.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Social media link retrieved successfully."
+                  data:
+                    type: object
+                    properties:
+                      platformName:
+                        type: string
+                        example: "Twitter"
+                      profileLink:
+                        type: string
+                        example: "https://twitter.com/username"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request was malformed or has invalid parameters. The user may have sent an incorrect or incomplete request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Bad Request"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["Invalid parameters in the request."]
+                  hints:
+                    type: array
+                    example: ["Ensure the `id` parameter is correct."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the requested social media link with the specified `id` could not be found. The user may have provided an invalid `id` or the resource may not exist.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Social media link not found."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "The social media link with the provided id was not found.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure the id is correct and the social media link exists.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    put:
+      tags:
+        - Social Links
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to update an existing social media link associated with their profile using the unique identifier (`id`). The user can modify the `platformName` and `profileLink` of the social media link. If the user is not authenticated, a **401 Unauthorized** status will be returned. If the social media link with the specified `id` is not found, a **404 Not Found** status will be returned. In case of an invalid or malformed request, a **400 Bad Request** status will be returned. If the update is successful, a **200 OK** status will be returned. If the server encounters an unexpected error, a **500 Internal Server Error** status will be returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the social media link to update.
+          schema:
+            type: string
+            example: "12345"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                platformName:
+                  type: string
+                  example: "Twitter"
+                profileLink:
+                  type: string
+                  example: "https://twitter.com/updatedusername"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the social media link was successfully updated with the provided `platformName` and `profileLink`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Social media link updated successfully."
+                  data:
+                    type: object
+                    properties:
+                      platformName:
+                        type: string
+                        example: "Twitter"
+                      profileLink:
+                        type: string
+                        example: "https://twitter.com/updatedusername"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request was malformed, missing required fields, or has invalid parameters. The user may have sent an incomplete or incorrect request.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Bad Request"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["Invalid or missing required parameters."]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure all required fields (`platformName`, `profileLink`) are provided and valid.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to update a social media link.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the requested social media link with the specified `id` could not be found. The user may have provided an incorrect `id`, or the resource may not exist.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Social media link not found."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "The social media link with the provided id was not found.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure the id is correct and the social media link exists.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    delete:
+      tags:
+        - Social Links
+      security:
+        - CookieAuth: []
+      description: |-
+        Deletes a social media link from the user's profile using the `id`. Requires authentication.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the social media link to delete.
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the social media link was successfully deleted.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Social media link deleted successfully."
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            format: date-time
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        nullable: true
+                        example: null
+                      deprecation:
+                        type: object
+                        nullable: true
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: object
+                        nullable: true
+                        example: null
+                      previous:
+                        type: object
+                        nullable: true
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request is invalid due to missing or incorrect parameters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid request parameters."
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["ID must be a valid string."]
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      ["Ensure the ID is provided and formatted correctly."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "invalid_id"
+                          timestamp:
+                            type: string
+                            format: date-time
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        nullable: true
+                        example: null
+                      deprecation:
+                        type: object
+                        nullable: true
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request is unauthorized due to missing or invalid authentication.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Unauthorized. Authentication required."
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["You must be logged in to perform this action."]
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      [
+                        "Ensure your authentication token is valid and included in the request.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            format: date-time
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        nullable: true
+                        example: null
+                      deprecation:
+                        type: object
+                        nullable: true
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the requested social media link does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Social media link not found."
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example: ["No social media link found with the given ID."]
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example: ["Verify the ID and try again."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "99999"
+                          timestamp:
+                            type: string
+                            format: date-time
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        nullable: true
+                        example: null
+                      deprecation:
+                        type: object
+                        nullable: true
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates an internal server error occurred while processing the request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    nullable: true
+                    example: null
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      ["Unexpected error occurred. Please try again later."]
+                  hints:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                      [
+                        "If the issue persists, contact support at support@example.com.",
+                      ]
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profile/sociallinks/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+  # POST
 components:
   schemas:
     Document:
