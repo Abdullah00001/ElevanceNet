@@ -13,6 +13,7 @@ info:
   contact:
     name: Abdullah Bin Omar Chowdhury
     email: abdullahbinomarchowdhury@gmail.com
+    url: https://abdullahTheSea.netlify.app
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
@@ -4382,7 +4383,7 @@ paths:
                         type: string
                         example: "https://elevancenet.netlify.app/docs/v1"
   # EXPERIENCE GET,PUT,DELETE ENDPOINT
-  /profile/experiences/:id:
+  /profiles/experiences/:id:
     get:
       tags:
         - Experiences
@@ -5063,6 +5064,1541 @@ paths:
                       documentation:
                         type: string
                         example: "https://elevancenet.netlify.app/docs/v1"
+  # Location POST,GET ENDPOINT DESIGN
+  /profiles/location:
+    post:
+      tags:
+        - Location
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows an authenticated user to create a new location with details including `locationName` and `port`. The user must be authenticated to access this resource. If the user is not authenticated, a **401 Unauthorized** response will be returned. Upon successful creation, a **200 OK** response will be returned with the newly created location details. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                locationName:
+                  type: string
+                  example: "Dhaka"
+                port:
+                  type: string
+                  example: "8000"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the location has been successfully created. The response will include the details of the newly created location, including the `locationName` and `port`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Location created successfully."
+                  data:
+                    type: object
+                    properties:
+                      locationName:
+                        type: string
+                        example: "Dhaka"
+                      port:
+                        type: string
+                        example: "8000"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "400":
+          description: |-
+            The 400 status indicates that the request was invalid due to incorrect or missing input data. This may happen if required fields like `locationName` or `port` are not provided, or if the data format is incorrect. The user should ensure that all necessary fields are included in the request and follow the required format.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid input data."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["Location name is required.", "Port is required."]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure all required fields are provided.",
+                        "Check that `port` is a valid string.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This status means that the user is not authenticated, or the authentication token is missing or invalid. The user must log in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that the request could not be completed due to an internal server error. This status code suggests that something went wrong on the server side while processing the request. The user will be informed to try again later, and if the issue persists, they are advised to contact support for further assistance.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    get:
+      tags:
+        - Location
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: fields
+          in: query
+          schema:
+            type: array
+            items:
+              type: string
+          style: form
+          explode: false
+      description: |-
+        This endpoint allows an authenticated user to retrieve location details, including the `locationName` and `port`. The user must be authenticated to access this data. If the user is not authenticated, a **401 Unauthorized** response will be returned. If the data is found, a **200 OK** response will be returned with the location details. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the request was successful, and the location details are returned. The response will include the `locationName` and `port` fields, representing the location's name and port number respectively.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Location details retrieved successfully."
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        locationName:
+                          type: string
+                          example: "Dhaka"
+                        port:
+                          type: string
+                          example: "8000"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This status means that the user is not authenticated, or the authentication token is missing or invalid. The user must log in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "67164cbbdbc6daf7db3bd9cd"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that the request could not be completed due to an internal server error. This status code suggests that something went wrong on the server side while processing the request. The user will be informed to try again later, and if the issue persists, they are advised to contact support for further assistance.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+  # LOCATION SINGLE GET,PUT,DELETE
+  /profiles/location/:id:
+    get:
+      tags:
+        - Location
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to retrieve the details of a single location by its `id`. The user must be authenticated to access this resource. Upon successful retrieval, a **200 OK** response will be returned with the location details. If the location is not found, a **404 Not Found** status will be returned. If the user is not authenticated, a **401 Unauthorized** status will be returned. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the location to retrieve.
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the location was successfully retrieved. The response will include the details of the location, such as `locationName` and `port`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Location retrieved successfully."
+                  data:
+                    type: object
+                    properties:
+                      locationName:
+                        type: string
+                        example: "Dhaka"
+                      port:
+                        type: string
+                        example: "8000"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request was invalid, typically due to incorrect parameters in the request. In this case, the `id` parameter might be malformed or not in the expected format.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid location ID format."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["The provided location ID is not valid."]
+                  hints:
+                    type: array
+                    example:
+                      ["Ensure that the `id` parameter is a valid location ID."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the request could not be processed due to unauthorized access. This means the user is not authenticated or their authentication token is missing or invalid. To access this resource, the user must be logged in.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the location with the given `id` could not be found. The `id` parameter may refer to a location that does not exist in the system. The user should verify that the `id` is correct and that the location exists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Location not found."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["No location found with the given ID."]
+                  hints:
+                    type: array
+                    example: ["Verify the location ID and try again."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    put:
+      tags:
+        - Location
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to update the details of an existing location by its `id`. The request must include the new details of the location in the body. The user must be authenticated to access this resource. Upon successful update, a **200 OK** response will be returned with the updated location details. If the location is not found, a **404 Not Found** status will be returned. If the request body is malformed or contains invalid data, a **400 Bad Request** status will be returned. If the user is not authenticated, a **401 Unauthorized** status will be returned. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the location to update.
+          schema:
+            type: string
+            example: "12345"
+      requestBody:
+        description: The new data for the location.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - locationName
+                - port
+              properties:
+                locationName:
+                  type: string
+                  example: "Dhaka"
+                port:
+                  type: string
+                  example: "8080"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the location was successfully updated. The response will include the updated location details, such as `locationName` and `port`.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Location updated successfully."
+                  data:
+                    type: object
+                    properties:
+                      locationName:
+                        type: string
+                        example: "Dhaka"
+                      port:
+                        type: string
+                        example: "8080"
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request body was invalid, such as missing required fields, incorrect data types, or malformed input. For example, the `locationName` or `port` may not be properly formatted.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid location data."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Missing required field: locationName",
+                        "Invalid format for port.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure that all required fields are present and correctly formatted.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the location with the given `id` could not be found. The `id` parameter refers to a location that does not exist in the system. The user should verify that the `id` is correct and that the location exists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Location not found."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["No location found with the given ID."]
+                  hints:
+                    type: array
+                    example: ["Verify the location ID and try again."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+    delete:
+      tags:
+        - Location
+      security:
+        - CookieAuth: []
+      description: |-
+        This endpoint allows the authenticated user to delete an existing location by its `id`. The user must be authenticated to access this resource. Upon successful deletion, a **200 OK** response will be returned, indicating that the location was removed. If the location is not found, a **404 Not Found** status will be returned. If the user is not authenticated, a **401 Unauthorized** status will be returned. If there is an error on the server while processing the request, a **500 Internal Server Error** response will be returned.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the location to delete.
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        "200":
+          description: |-
+            The 200 status indicates that the location was successfully deleted from the system. The response will include a confirmation message stating that the location was removed.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Location deleted successfully."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: []
+                  hints:
+                    type: array
+                    example: []
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "400":
+          description: |-
+            The 400 status indicates that the request is malformed or invalid. For example, the `id` parameter may be missing or incorrectly formatted.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Invalid location ID."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["The location ID is malformed."]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Ensure the location ID is correct and properly formatted.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "401":
+          description: |-
+            The 401 status indicates that the user is not authenticated or their authentication token is missing or invalid. The user must be logged in to access this resource.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Authentication required."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["User is not authenticated."]
+                  hints:
+                    type: array
+                    example: ["Please login to access this resource."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "404":
+          description: |-
+            The 404 status indicates that the location with the given `id` could not be found. The `id` parameter refers to a location that does not exist in the system. The user should verify that the `id` is correct and that the location exists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Location not found."
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example: ["No location found with the given ID."]
+                  hints:
+                    type: array
+                    example: ["Verify the location ID and try again."]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: "12345"
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+
+        "500":
+          description: |-
+            The 500 status indicates that there was an unexpected error on the server while processing the request. The server could not complete the request due to an internal issue. The user should try again later and contact support if the issue persists.
+          content:
+            application/json:
+              schema:
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal Server Error"
+                  data:
+                    type: object
+                    example: null
+                  errors:
+                    type: array
+                    example:
+                      [
+                        "Due to unexpected error, the server may be down or could not respond.",
+                      ]
+                  hints:
+                    type: array
+                    example:
+                      [
+                        "Please try again later. If the issue persists, please contact our support team at support@example.com.",
+                      ]
+                  meta:
+                    type: object
+                    properties:
+                      info:
+                        type: object
+                        properties:
+                          requestedId:
+                            type: string
+                            example: null
+                          timestamp:
+                            type: string
+                            example: "2025-01-27T12:30:00.000Z"
+                          version:
+                            type: string
+                            example: "v1.0.0"
+                          environment:
+                            type: string
+                            example: "production"
+                      pagination:
+                        type: object
+                        example: null
+                      deprecation:
+                        type: object
+                        example: null
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/profiles/location/12345"
+                      next:
+                        type: string
+                        example: null
+                      previous:
+                        type: string
+                        example: null
+                      documentation:
+                        type: string
+                        example: "https://elevancenet.netlify.app/docs/v1"
+  # SOCIAL MEDIA POST,GET ENDPOINT DESIGN
 components:
   schemas:
     Document:
