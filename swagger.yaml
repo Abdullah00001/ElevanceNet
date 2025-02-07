@@ -8106,7 +8106,16 @@ paths:
                       documentation:
                         type: string
                         example: "https://elevancenet.netlify.app/docs/v1"
-  # POST
+  # TOPIC POST,GET ENDPOINT DESIGN
+  /topics:
+    get:
+      tags:
+        - Topics
+      security:
+        - CookieAuth: []
+      description: |-
+
+
 components:
   schemas:
     Document:
